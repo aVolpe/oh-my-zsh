@@ -6,3 +6,4 @@ custom/example.zsh
 *.swp
 !custom/example.zshcache
 cache/
+custom/alias_maquinas.zsh
