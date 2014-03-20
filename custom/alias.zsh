@@ -1,8 +1,4 @@
 #alias de directorios
-alias go_d='cd /home/arturo/develop/facultad/workspace'
-alias datos='cd /media/datos/'
-alias tesis='/home/arturo/develop/tesis/documents/'
-
 
 #Alais de programas SUDO
 alias svi='sudo /usr/bin/vim'
@@ -10,9 +6,11 @@ alias ifconfig='sudo /sbin/ifconfig'
 
 #Alias de facilidades
 alias wget='wget -c'
+alias ps='ps -eF'
+alias psg='ps -eF | grep'
 
 #Alias mbaretes
-alias kjboss='ruby /home/arturo/scripts/limpiar_standalone.rb'
+alias kjboss='ruby ~/scripts/limpiar_standalone.rb'
 alias tf='sh scripts/facu.sh'
 alias sd='sudo /sbin/shutdown -t 00 now'
 alias rb='sudo /sbin/reboot'
@@ -32,11 +30,16 @@ alias gpu='git pull && cd base && git pull && cd -'
 #Alias de GRTK
 alias te='python $PROGRAMS/grtk/spent.py'
 
-alias trim="sed -e 's/^ *//g' -e 's/ *$//g'"
-alias keys='less /home/arturo/scripts/shortcuts.txt'
-alias clear_latex='find . -regex ".*\(aux\|bbl\|blg\|log\|nav\|out\|snm\|toc\)$" -exec rm -i {} \;'
-mesg y
+#Alias pseudo-scripts
+alias trim="sed -e 's/^\s*//g' -e 's/\s*$//g'"
+alias keys='less ~/scripts/shortcuts.txt'
+alias clear_latex='find . -regex ".*\(aux\|bbl\|blg\|log\|nav\|out\|snm\|toc\|-blx\.bib\|pdf\)$" -exec rm -i {} \;'
 
+alias vup='qdbus org.kde.kmix /kmix/KMixWindow/actions/increase_volume org.qtproject.Qt.QAction.trigger'
+alias vdo='qdbus org.kde.kmix /kmix/KMixWindow/actions/decrease_volume org.qtproject.Qt.QAction.trigger'
+alias vmu='qdbus org.kde.kmix /kmix/KMixWindow/actions/mute org.qtproject.Qt.QAction.trigger'
 
-
-cat /home/arturo/.proxy_status
+if [ -f ~/.proxy_status ]
+then
+	cat ~/.proxy_status
+fi

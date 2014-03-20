@@ -1,11 +1,7 @@
-PROGRAMS='/home/arturo/programs/'
+PROGRAMS='/home/avolpe/programs'
 
 #Alias de programas
-#alias mvn='/home/arturo/programs/apache-maven-3.0.5/bin/mvn'
-alias mvnD='/home/arturo/programs/apache-maven-3.0.5/bin/mvnDebug'
-alias liquibase='/home/arturo/programs/liquibase/liquibase'
-alias t='$PROGRAMS/todo/todo.sh'
-alias jmeter='nohup  sh /home/arturo/develop/facultad/test/jmeter/bin/jmeter.sh &'
-alias md='mkdir -p'
-alias soapui='nohup sh /home/arturo/programs/soapui-4.6.0/bin/soapui.sh &'
-alias rtm='python $PROGRAMS/rtm/rtm'
+alias liquibase="$PROGRAMS/programs/liquibase/liquibase"
+alias jmeter="nohup  sh $PROGRAMS/develop/facultad/test/jmeter/bin/jmeter.sh &"
+alias soapui="nohup sh $PROGRAMS/SoapUI-4.6.3/bin/soapui.sh"
+alias ireport="sh $PROGRAMS/iReport-4.8.0/bin/ireport --jdkhome /usr/lib64/jvm/jre-1.7.0-openjdk/"

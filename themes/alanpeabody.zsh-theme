@@ -1,7 +1,15 @@
+for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+	eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+	eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
+	(( count = $count + 1 ))
+done
+PR_NO_COLOUR="%{$reset_color%}"
 
 local user='%{$fg[magenta]%}%n@%{$fg[magenta]%}%m%{$reset_color%}'
 local pwd='%{$fg[blue]%}%~%{$reset_color%}'
-local rvm=''
+local cont='%{$fg[blue]%}%_%{$reset_color%}'
+
+local date='$PR_LIGHT_GREEN%D{%A %d %B} $PR_CYAN%* $PR_YELLOW%D{%p}%f$PR_NO_COLOUR'
 
 if which rvm-prompt &> /dev/null; then
   rvm='%{$fg[green]%}‹$(rvm-prompt i v g)›%{$reset_color%}'
@@ -25,5 +33,7 @@ ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[magenta]%} ➜"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} ═"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} ✭"
 
-PROMPT="${user} ${pwd}$ "
-RPROMPT="${return_code} ${git_branch} ${rvm} %*"
+PROMPT="[${pwd}]$ "
+RPROMPT="${git_branch} [${date}]"
+
+PS2='[$PR_CYAN%_$PR_NO_COLOUR] '
