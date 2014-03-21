@@ -33,7 +33,7 @@ alias te='python $PROGRAMS/grtk/spent.py'
 #Alias pseudo-scripts
 alias trim="sed -e 's/^\s*//g' -e 's/\s*$//g'"
 alias keys='less ~/scripts/shortcuts.txt'
-alias clear_latex='find . -regex ".*\(aux\|bbl\|blg\|log\|nav\|out\|snm\|toc\|-blx\.bib\|pdf\)$" -exec rm -i {} \;'
+alias clear_latex='find . -regex ".*\(aux\|bbl\|blg\|log\|nav\|out\|snm\|toc\|-blx\.bib\|pdf\|fdb_latexmk\|run\.xml\|fls\)$" -exec rm -i {} \;'
 
 alias vup='qdbus org.kde.kmix /kmix/KMixWindow/actions/increase_volume org.qtproject.Qt.QAction.trigger'
 alias vdo='qdbus org.kde.kmix /kmix/KMixWindow/actions/decrease_volume org.qtproject.Qt.QAction.trigger'
