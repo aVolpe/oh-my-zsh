@@ -121,18 +121,27 @@ down_video () {
         TO_DOWNLOAD=`xclip -o`
     fi
 
-    echo $TO_DOWNLOAD >> ~/Videos/toDownload.txt
+    echo $TO_DOWNLOAD | sudo tee -a ~/videos/toDownload.txt
     echo "Agregando $TO_DOWNLOAD a la lista de descargas"
 
 }
 
 down_resume () {
    echo "Resumiendo descarga"
-   cd ~/Videos/
-   youtube-dl -c --batch-file=toDownload.txt  -o "%(title)s.%(ext)s"
+   cd ~/videos/
+   sudo youtube-dl -c --batch-file=toDownload.txt  -o "%(title)s.%(ext)s"
 }
 
 down_clear() {
 
-   echo "" > ~/Videos/toDownload.txt
+    sudo rm ~/videos/toDownload.txt
+    sudo touch ~/videos/toDownload.txt
+}
+
+
+conv() {                                                                                                                                                           ✹master [Friday 06 June 11:05:09 AM]
+    rm -f conv_tmp
+    iconv --from-code=ISO-8859-1 --to-code=UTF-8 $1 -o conv_tmp 
+    cat conv_tmp > $1
+    rm conv_tmp
 }

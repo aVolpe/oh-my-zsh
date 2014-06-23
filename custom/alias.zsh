@@ -23,9 +23,10 @@ alias clip='xclip -selection clipboard'
 alias gc='git commit --verbose -s'
 alias gd='git diff'
 alias gp='git format-patch -1'
-alias gpc="git format-patch -1 | xargs readlink -f | sed -e 's/^ *//g' -e 's/ *$//g' | xclip -selection clipboard"
+alias gpc="git format-patch -1 | xargs readlink -f | xargs echo -n | xclip -selection clipboard"
 alias gs='git status'
 alias gpu='git pull && cd base && git pull && cd -'
+alias gclear='git reset --hard origin/master'
 
 #Alias de GRTK
 alias te='python $PROGRAMS/grtk/spent.py'
