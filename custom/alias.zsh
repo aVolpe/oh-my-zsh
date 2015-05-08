@@ -17,10 +17,10 @@ alias rb='sudo /sbin/reboot'
 alias kc='ps -eF | grep chrome | tr -s " " | cut -d " " -f2 | xargs kill -9 && google-chrome'
 alias open='kde-open '
 alias grep='grep -i'
-alias clip='xclip -selection clipboard'
+alias clip='xargs echo -n | xclip -selection clipboard'
 
 #Alias de GIT
-alias gc='git commit --verbose -s'
+alias gc='git commit --verbose'
 alias gd='git diff'
 alias gp='git format-patch -1'
 alias gpc="git format-patch -1 | xargs readlink -f | xargs echo -n | xclip -selection clipboard"
@@ -40,7 +40,14 @@ alias vup='qdbus org.kde.kmix /kmix/KMixWindow/actions/increase_volume org.qtpro
 alias vdo='qdbus org.kde.kmix /kmix/KMixWindow/actions/decrease_volume org.qtproject.Qt.QAction.trigger'
 alias vmu='qdbus org.kde.kmix /kmix/KMixWindow/actions/mute org.qtproject.Qt.QAction.trigger'
 
-if [ -f ~/.proxy_status ]
-then
-	cat ~/.proxy_status
-fi
+
+function cd() 
+{
+	builtin cd "$@"
+	pwd > ~/.last_dir
+}
+
+alias ll='ls -l --group-directories-first -h'
+alias la='ls -la --group-directories-first -h'
+
+alias tmux='TERM=xterm-256color tmux'

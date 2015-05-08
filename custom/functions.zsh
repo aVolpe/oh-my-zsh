@@ -88,7 +88,7 @@ create_month () {
     if [ ! -z "$3" ]; 
     then
         echo "Creando directorio $1"
-        mkdir $1
+        mkdir "2015/$1"
         echo "\n\n== $1 ==\n" >> gastos_diarios.wiki
     fi
 
@@ -100,7 +100,7 @@ create_month () {
             NUMBER="0$i"
         fi
         # EL nombre sin extensión
-        NAME="$1/$NUMBER"
+        NAME="2015/$1/$NUMBER"
         # Nombre completo
         NEW_FILE="$NAME.wiki"
         echo "Check $NEW_FILE"
@@ -139,9 +139,74 @@ down_clear() {
 }
 
 
-conv() {                                                                                                                                                           ✹master [Friday 06 June 11:05:09 AM]
+conv() {
     rm -f conv_tmp
     iconv --from-code=ISO-8859-1 --to-code=UTF-8 $1 -o conv_tmp 
     cat conv_tmp > $1
     rm conv_tmp
 }
+
+function edit() {
+    echo "Buscando $1"
+    list=`find -iname "$1"`
+    size=`echo $list | wc -l `
+    chars=`echo $list | wc -m `
+    if [ $chars -eq "1" ]
+    then
+	    echo "No encontrado";
+	    return 0;
+    fi
+
+    if [ $size -eq "1" ]
+    then
+	    echo "Opening $list"
+	    vim $list;
+	    return 0;
+    fi
+
+    echo "Cantidad de archivos: $size, seleccione alguno:"
+    echo "0: Salir"
+    i="1";
+    while read -r line; 
+    do
+        echo "$i: $line"
+	    i=$(($i+1))
+    done <<< "$list"
+
+    echo ""
+    echo "Ingrese un numero:"
+    read number
+    while [ $number -gt $size ]
+    do
+	    echo "Numero muy grande, elija otro"
+	    read number
+    done
+    if [ $number -eq "0" ]
+    then
+	    return 0;
+    fi
+    file=`echo $list | head -n $number | tail -1`
+    vim $file
+}
+
+# https://github.com/junegunn/fzf/wiki/example
+function fe() {
+  local file
+  file=$(fzf --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && ${EDITOR:-vim} "$file"
+}
+
+function fo() {
+  local file
+  file=$(fzf --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && open "$file"
+}
+
+function fd() {
+  local dir
+  dir=$(find ${1:-*} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+
