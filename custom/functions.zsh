@@ -7,7 +7,7 @@ total () {
     WITH_HEADER="$HEADER \n$COINCIDENCES"
     echo "Calculando total de \e[5;1;31m\"$TO_G\"\e[0m. En total `grep -R $TO_G | wc -l` registros"
     echo "======================"
-    echo $WITH_HEADER | column -s "|" -t 
+    echo $WITH_HEADER | column -s "|" -t
     echo "======================"
     # Tiene el problema de no funcionar bien cuando se utilizan números en el motivo
     # grep -R $TO_G | sed -e 's/[0-9][0-9]\.//' -e 's/#.*//g' -e 's/\([^0-9]\)//g' | awk '{s+=$1} END {print "Total:\t\t\t\t\t\t" s}'
@@ -58,7 +58,7 @@ bright () {
 # Resultado:
 #    El archivo /home/test/test ahora tiene una copia denominada '/home/test/test_'
 duplicate () {
-    
+
     cp $1 "$1_"
     echo "$1_"
 }
@@ -70,7 +70,7 @@ duplicate () {
 # Resultado
 #    Archivo duplicado eliminado y la única copia esta en la ubicación original.
 revert_dup () {
-    
+
     mv "$1_" $1
     echo $1
 }
@@ -85,7 +85,7 @@ create_month () {
     fi
 
     #Crea la carpeta
-    if [ ! -z "$3" ]; 
+    if [ ! -z "$3" ];
     then
         echo "Creando directorio $1"
         mkdir "2015/$1"
@@ -114,7 +114,7 @@ create_month () {
 }
 
 
-down_video () { 
+down_video () {
     TO_DOWNLOAD=$1;
     if [ -z "$1"];
     then
@@ -141,7 +141,7 @@ down_clear() {
 
 conv() {
     rm -f conv_tmp
-    iconv --from-code=ISO-8859-1 --to-code=UTF-8 $1 -o conv_tmp 
+    iconv --from-code=ISO-8859-1 --to-code=UTF-8 $1 -o conv_tmp
     cat conv_tmp > $1
     rm conv_tmp
 }
@@ -153,24 +153,24 @@ function edit() {
     chars=`echo $list | wc -m `
     if [ $chars -eq "1" ]
     then
-	    echo "No encontrado";
-	    return 0;
+        echo "No encontrado";
+        return 0;
     fi
 
     if [ $size -eq "1" ]
     then
-	    echo "Opening $list"
-	    vim $list;
-	    return 0;
+        echo "Opening $list"
+        vim $list;
+        return 0;
     fi
 
     echo "Cantidad de archivos: $size, seleccione alguno:"
     echo "0: Salir"
     i="1";
-    while read -r line; 
+    while read -r line;
     do
         echo "$i: $line"
-	    i=$(($i+1))
+        i=$(($i+1))
     done <<< "$list"
 
     echo ""
@@ -178,12 +178,12 @@ function edit() {
     read number
     while [ $number -gt $size ]
     do
-	    echo "Numero muy grande, elija otro"
-	    read number
+        echo "Numero muy grande, elija otro"
+        read number
     done
     if [ $number -eq "0" ]
     then
-	    return 0;
+        return 0;
     fi
     file=`echo $list | head -n $number | tail -1`
     vim $file
@@ -210,3 +210,29 @@ function fd() {
 }
 
 
+function v_cut() {
+
+    ffmpeg -i "$3" -ss "$1" -to "$2" -c copy "$4"
+}
+
+function v_cut_from() {
+
+    ffmpeg -i "$2" -ss "$1" -c:v copy -c:a copy "$3"
+}
+
+function v_cut_to() {
+
+    ffmpeg -i "$2" -to "$1" -c copy "$3"
+}
+
+# Custom CD
+function cd()
+{
+    builtin cd "$@"
+    pwd > ~/.last_dir
+}
+
+function lcd
+{
+     cd `cat ~/.last_dir`
+}

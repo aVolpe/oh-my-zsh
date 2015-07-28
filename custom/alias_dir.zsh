@@ -22,3 +22,5 @@ FINANZAS=~/.dropbox/Dropbox/wiki/finanzas/
 JBOSS=/home/avolpe/develop/servidores/jboss-as-7.1.1.Final
 DEV=/home/avolpe/develop
 LIBRO=/home/avolpe/.dropbox/Dropbox/sharelatex/libro/libro
+CDS=/home/avolpe/develop/cds
+CEAMSO=/home/avolpe/develop/ceamso

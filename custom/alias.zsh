@@ -1,7 +1,7 @@
 #alias de directorios
 
 #Alais de programas SUDO
-alias svi='sudo /usr/bin/vim'
+alias svi='sudoedit'
 alias ifconfig='sudo /sbin/ifconfig'
 
 #Alias de facilidades
@@ -17,7 +17,8 @@ alias rb='sudo /sbin/reboot'
 alias kc='ps -eF | grep chrome | tr -s " " | cut -d " " -f2 | xargs kill -9 && google-chrome'
 alias open='kde-open '
 alias grep='grep -i'
-alias clip='xargs echo -n | xclip -selection clipboard'
+alias clip='xargs echo | xclip -selection clipboard'
+alias clipn='xargs echo -n | xclip -selection clipboard'
 
 #Alias de GIT
 alias gc='git commit --verbose'
@@ -40,14 +41,12 @@ alias vup='qdbus org.kde.kmix /kmix/KMixWindow/actions/increase_volume org.qtpro
 alias vdo='qdbus org.kde.kmix /kmix/KMixWindow/actions/decrease_volume org.qtproject.Qt.QAction.trigger'
 alias vmu='qdbus org.kde.kmix /kmix/KMixWindow/actions/mute org.qtproject.Qt.QAction.trigger'
 
-
-function cd() 
-{
-	builtin cd "$@"
-	pwd > ~/.last_dir
-}
-
 alias ll='ls -l --group-directories-first -h'
 alias la='ls -la --group-directories-first -h'
 
 alias tmux='TERM=xterm-256color tmux'
+alias agl='ag --pager "less -R" '
+
+# Alias de docker
+alias docker-compose='sudo /usr/local/bin/docker-compose'
+alias docker='sudo docker'
