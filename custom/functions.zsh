@@ -232,7 +232,18 @@ function cd()
     pwd > ~/.last_dir
 }
 
-function lcd
+function lcd()
 {
      cd `cat ~/.last_dir`
+}
+
+docker_id() 
+{
+     echo `sudo docker ps | grep "$@" | cut -d" " -f1`
+}
+
+docker_rm() 
+{
+    id=`docker_id "$@"`
+    echo `sudo docker rm "$id"`
 }
