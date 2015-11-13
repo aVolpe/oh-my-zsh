@@ -2,6 +2,7 @@
 
 #Alais de programas SUDO
 alias svi='sudoedit'
+alias systemctl='sudo systemctl'
 alias ifconfig='sudo /sbin/ifconfig'
 
 #Alias de facilidades
@@ -50,3 +51,7 @@ alias agl='ag --pager "less -R" '
 # Alias de docker
 alias docker-compose='sudo /usr/local/bin/docker-compose'
 alias docker='sudo docker'
+
+
+# Alias wl
+alias wl='/usr/lib/node_modules/wunderline/wunderline.js'
