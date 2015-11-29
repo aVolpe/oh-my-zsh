@@ -49,9 +49,10 @@ alias tmux='TERM=xterm-256color tmux'
 alias agl='ag --pager "less -R" '
 
 # Alias de docker
-alias docker-compose='sudo /usr/local/bin/docker-compose'
+alias docker-compose='sudo docker-compose'
 alias docker='sudo docker'
 
 
 # Alias wl
 alias wl='/usr/lib/node_modules/wunderline/wunderline.js'
+alias vim='gvim -v'

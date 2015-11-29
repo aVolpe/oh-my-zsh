@@ -209,6 +209,22 @@ function fd() {
   cd "$dir"
 }
 
+fkill() {
+  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+
+  if [ "x$pid" != "x" ]
+  then
+    kill -${1:-9} $pid
+  fi
+}
+
+cdf() {
+  dest_dir=$(cat ~/.oh-my-zsh/custom/alias_dir.zsh | sed 's/\/home\/avolpe/~/g' | grep "^\w*=.*" | column -s'=' -t | fzf)
+  if [[ $dest_dir != '' ]]; then
+    dest_dir="$(echo $dest_dir | sed 's/~/\/home\/avolpe/')"
+    builtin cd "$(echo $dest_dir | sed 's/\w*\s\+//')"
+  fi
+}
 
 function v_cut() {
 
@@ -237,12 +253,12 @@ function lcd()
      cd `cat ~/.last_dir`
 }
 
-docker_id() 
+docker_id()
 {
      echo `sudo docker ps | grep "$@" | cut -d" " -f1`
 }
 
-docker_rm() 
+docker_rm()
 {
     id=`docker_id "$@"`
     echo `sudo docker rm "$id"`
