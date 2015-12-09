@@ -219,10 +219,10 @@ fkill() {
 }
 
 cdf() {
-  dest_dir=$(cat ~/.oh-my-zsh/custom/alias_dir.zsh | sed 's/\/home\/avolpe/~/g' | grep "^\w*=.*" | column -s'=' -t | fzf)
+  dest_dir=$(cat ~/.oh-my-zsh/custom/alias_dir.zsh | sed 's/\/home\/avolpe/~/g' | grep "^\w*=.*" | column -s'=' -t | sort | fzf)
   if [[ $dest_dir != '' ]]; then
     dest_dir="$(echo $dest_dir | sed 's/~/\/home\/avolpe/')"
-    builtin cd "$(echo $dest_dir | sed 's/\w*\s\+//')"
+    cd "$(echo $dest_dir | sed 's/\w*\s\+//')"
   fi
 }
 
