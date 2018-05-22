@@ -193,7 +193,7 @@ function edit() {
 function fe() {
   local file
   file=$(fzf --query="$1" --select-1 --exit-0)
-  [ -n "$file" ] && vim "$file"
+  [ -n "$file" ] && nvim "$file"
 }
 
 function fo() {
@@ -210,7 +210,7 @@ function fd() {
 }
 
 fkill() {
-  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+  pid=$(ps | sed 1d | fzf -m | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
@@ -219,9 +219,10 @@ fkill() {
 }
 
 cdf() {
-  dest_dir=$(cat ~/.oh-my-zsh/custom/alias_dir.zsh | sed 's/\/home\/avolpe/~/g' | grep "^\w*=.*" | column -s'=' -t | sort | fzf)
+  dest_dir=$(cat ~/.oh-my-zsh/custom/alias_dir.zsh | sed 's/\/home\/arturovolpe/~/g' | grep "^\w*=.*" | grep "$1" | column -s'=' -t | sort | fzf -1)
   if [[ $dest_dir != '' ]]; then
-    dest_dir="$(echo $dest_dir | sed 's/~/\/home\/avolpe/')"
+    dest_dir="$(echo $dest_dir | sed 's/~/\/Users\/arturovolpe/')"
+    echo "$dest_dir"
     cd "$(echo $dest_dir | sed 's/\w*\s\+//')"
   fi
 }
@@ -250,7 +251,7 @@ function cd()
 
 function lcd()
 {
-     cd `cat ~/.last_dir`
+    [ -f ~/.last_dir ] && cd `cat ~/.last_dir`
 }
 
 docker_id()
