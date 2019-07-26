@@ -192,8 +192,8 @@ function edit() {
 # https://github.com/junegunn/fzf/wiki/example
 function fe() {
   local file
-  file=$(fzf --query="$1" --select-1 --exit-0)
-  [ -n "$file" ] && nvim "$file"
+  file=$(fzf --query="$1" --select-1 --exit-0 --preview 'bat --color always {}')
+  [ -n "$file" ] && vi "$file"
 }
 
 function fo() {
@@ -210,7 +210,7 @@ function fd() {
 }
 
 fkill() {
-  pid=$(ps | sed 1d | fzf -m | awk '{print $2}')
+  pid=$(ps | gsed 1d | fzf -m | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
@@ -219,11 +219,11 @@ fkill() {
 }
 
 cdf() {
-  dest_dir=$(cat ~/.oh-my-zsh/custom/alias_dir.zsh | sed 's/\/home\/arturovolpe/~/g' | grep "^\w*=.*" | grep "$1" | column -s'=' -t | sort | fzf -1)
+  dest_dir=$(cat ~/.oh-my-zsh/custom/alias_dir.zsh | gsed 's/\/home\/arturovolpe/~/g' | grep "^\w*=.*" | grep "$1" | column -s'=' -t | sort | fzf -1)
   if [[ $dest_dir != '' ]]; then
-    dest_dir="$(echo $dest_dir | sed 's/~/\/Users\/arturovolpe/')"
+    dest_dir="$(echo $dest_dir | gsed 's/~/\/Users\/arturovolpe/')"
     echo "$dest_dir"
-    cd "$(echo $dest_dir | sed 's/\w*\s\+//')"
+    cd "$(echo $dest_dir | gsed 's/\w*\s\+//')"
   fi
 }
 
@@ -263,4 +263,33 @@ docker_rm()
 {
     id=`docker_id "$@"`
     echo `sudo docker rm "$id"`
+}
+
+# uso ft_dev_log fintech-platapp-new-dev-worker-2 sgb 
+ft_dev_log()
+{
+    id=`ssh -t $1 "docker ps"  | grep $2 | tail -n1 | awk '{print $1}'`
+    echo ".$id."
+    if [[ "$id" == "" ]]
+    then
+        echo "Container $2 not found on machine $1"
+        return
+    fi
+    ssh -t $1 "docker exec $id  tail -f /usr/local/tomcat/temp/spring.log -n 1000" 
+    terminal-notifier -title "ft_dev_log" -subtitle "Finished" -message "Connection to log $2 in $1 closed"
+}
+
+
+# uso ft_dev_jcard_log fintech-platapp-hom-cms restapi
+ft_dev_jcard_log()
+{
+    id=`ssh -t $1 "docker ps"  | grep $2 | tail -n1 | awk '{print $1}'`
+    echo ".$id."
+    if [[ "$id" == "" ]]
+    then
+        echo "Container $2 not found on machine $1"
+        return
+    fi
+    ssh -t $1 "docker exec $id  tail -f -n 1000 ./restapi/log/q2.log" 
+    terminal-notifier -title "ft_dev_log" -subtitle "Finished" -message "Connection to log $2 in $1 closed"
 }

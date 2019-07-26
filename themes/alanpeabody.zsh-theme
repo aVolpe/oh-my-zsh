@@ -1,7 +1,3 @@
-function getTemp() {
-    tmp=`sensors | grep Physical | cut -d" " -f5`
-    echo "$tmp"
-}
 
 for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 	eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'

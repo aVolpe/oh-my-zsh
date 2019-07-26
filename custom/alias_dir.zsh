@@ -15,3 +15,5 @@ YODONO=~/develop/simbiotica/yodono/app
 BOCADEURNA=~/develop/personal/bocadeurnapy
 COTIZACION=~/develop/personal/cotizaciones
 taxio=~/develop/cosmesoft/taxio
+fintech=~/develop/fintech.works
+sistagua=~/develop/cosmesoft/Sistagua
