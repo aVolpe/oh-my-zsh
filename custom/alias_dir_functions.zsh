@@ -30,6 +30,7 @@ function cdf() {
     dest_dir=$(cat $ALIAS_DIR_FILE |\
         gsed "s#$HOME#~#g" |\
         column -s'=' -t |\
+        grep "$1" |\
         sort |\
         fzf -1)
     if [[ $dest_dir != '' ]]; then
