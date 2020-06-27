@@ -20,6 +20,6 @@ function runwithprofile(){
     fi
 }
 
-alias cmus='runwithprofile "Harper" "cmus"'
-alias yast='runwithprofile "Neopolitan" "/sbin/yast" su'
-alias hangups='runwithprofile "3024 Night" "hangups"'
+#alias cmus='runwithprofile "Harper" "cmus"'
+#alias yast='runwithprofile "Neopolitan" "/sbin/yast" su'
+#alias hangups='runwithprofile "3024 Night" "hangups"'

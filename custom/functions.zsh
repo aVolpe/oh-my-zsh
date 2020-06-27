@@ -193,7 +193,7 @@ function edit() {
 function fe() {
   local file
   file=$(fzf --query="$1" --select-1 --exit-0 --preview 'bat --color always {}')
-  [ -n "$file" ] && vi "$file"
+  [ -n "$file" ] && nvim "$file"
 }
 
 function fo() {
@@ -209,21 +209,30 @@ function fd() {
   cd "$dir"
 }
 
+function fbr() {
+  local branches branch
+  branches=$(git --no-pager branch -vv --sort=committerdate) &&
+  branch=$(echo "$branches" | fzf +m) &&
+  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+}
+
+fco_preview() {
+  local branches target
+  branches=$(git --no-pager branch -vv --all --sort=committerdate --color=always) || return
+  target=$(
+    echo "$branches" |
+    fzf --no-hscroll --no-multi -n 1 \
+        --no-sort --tac \
+        --ansi --preview="git log --color=always -150 '..{1}'") || return
+  git checkout $(echo "$target" | awk '{print $1}' | sed "s/.* //" | sed "s/remotes\/origin\///")
+}
+
 fkill() {
   pid=$(ps | gsed 1d | fzf -m | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
     kill -${1:-9} $pid
-  fi
-}
-
-cdf() {
-  dest_dir=$(cat ~/.oh-my-zsh/custom/alias_dir.zsh | gsed 's/\/home\/arturovolpe/~/g' | grep "^\w*=.*" | grep "$1" | column -s'=' -t | sort | fzf -1)
-  if [[ $dest_dir != '' ]]; then
-    dest_dir="$(echo $dest_dir | gsed 's/~/\/Users\/arturovolpe/')"
-    echo "$dest_dir"
-    cd "$(echo $dest_dir | gsed 's/\w*\s\+//')"
   fi
 }
 
@@ -275,7 +284,7 @@ ft_dev_log()
         echo "Container $2 not found on machine $1"
         return
     fi
-    ssh -t $1 "docker exec $id  tail -f /usr/local/tomcat/temp/spring.log -n 1000" 
+    ssh -t $1 "docker exec $id  tail -f /usr/local/tomcat/temp/spring.log -n ${3:-1000}" 
     terminal-notifier -title "ft_dev_log" -subtitle "Finished" -message "Connection to log $2 in $1 closed"
 }
 
@@ -290,6 +299,13 @@ ft_dev_jcard_log()
         echo "Container $2 not found on machine $1"
         return
     fi
-    ssh -t $1 "docker exec $id  tail -f -n 1000 ./restapi/log/q2.log" 
+    ssh -t $1 "docker exec $id  tail -f -n ${3:-1000} ./restapi/log/q2.log" 
     terminal-notifier -title "ft_dev_log" -subtitle "Finished" -message "Connection to log $2 in $1 closed"
+}
+
+update_ctags()
+{
+    truncate --size 0 ctags
+    CTAGS=`brew --prefix`/bin/ctags
+    find . -name \*.java -exec $CTAGS --append {} \;
 }
