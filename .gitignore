@@ -5,3 +5,5 @@ custom/
 cache/
 custom/alias_maquinas.zsh
 log/
+*.swp
+.DS_Store
