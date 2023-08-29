@@ -7,3 +7,7 @@ custom/alias_maquinas.zsh
 log/
 *.swp
 .DS_Store
+
+# editor configs
+.vscode
+.idea
