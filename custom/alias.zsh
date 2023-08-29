@@ -51,5 +51,3 @@ alias tmux='TERM=xterm-256color tmux'
 alias agl='ag --pager "less -R" '
 alias docker-kill='docker stop $(docker ps -aq)'
 
-alias pngpaste='~/programs/pngpaste/pngpaste'
-alias matterhorn="cd ~ && EDITOR='vim -c \"set ft=markdown\"' ~/programs/matterhorn-50200.5.0-Darwin-x86_64/matterhorn"

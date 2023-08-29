@@ -216,7 +216,7 @@ function fbr() {
   git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
 }
 
-fco_preview() {
+function fco_preview() {
   local branches target
   branches=$(git --no-pager branch -vv --all --sort=committerdate --color=always) || return
   target=$(
@@ -225,15 +225,6 @@ fco_preview() {
         --no-sort --tac \
         --ansi --preview="git log --color=always -150 '..{1}'") || return
   git checkout $(echo "$target" | awk '{print $1}' | sed "s/.* //" | sed "s/remotes\/origin\///")
-}
-
-fkill() {
-  pid=$(ps | gsed 1d | fzf -m | awk '{print $2}')
-
-  if [ "x$pid" != "x" ]
-  then
-    kill -${1:-9} $pid
-  fi
 }
 
 function v_cut() {
@@ -260,7 +251,11 @@ function cd()
 
 function lcd()
 {
-    [ -f ~/.last_dir ] && cd `cat ~/.last_dir`
+    if [[ -f ~/.last_dir ]] 
+    then
+        LCD_PATH=`cat ~/.last_dir`
+        cd $LCD_PATH
+    fi
 }
 
 docker_id()
@@ -308,4 +303,65 @@ update_ctags()
     truncate --size 0 ctags
     CTAGS=`brew --prefix`/bin/ctags
     find . -name \*.java -exec $CTAGS --append {} \;
+}
+
+npmf() 
+{
+    cat package.json  \
+        | jq -r ".scripts | to_entries | .[] | [.key, .value] | @tsv" \
+        | fzf -1 \
+          --delimiter "\t" \
+          --ansi --tac \
+          --bind 'enter:become(npm run {1})'
+}
+
+
+dbf() 
+{
+    # Rows 
+    rows=$(cat ~/.config/pgcli/config |\
+        sed -n -e '/\[alias_dsn\]/,/\[data_formats\]/ p' |\
+        sed -n -e '/^#/!p' |\
+        sed -n -e '/^\[/!p')
+    with_header="NAME = CONNECTION\n${rows}"
+    # Picks db
+    db_name=$(echo $with_header |\
+        column -s'=' -t |\
+        fzf -1 --header-lines=1 +s --query=$1)
+    if [[ $db_name != '' ]]; then
+        db_name="$(echo $db_name | gsed "s#\s.*##")"
+        echo "Connecting to $db_name"
+        pgcli -D "$db_name"
+    fi
+}
+
+db_docker() 
+{
+    # Picks db
+    db_name=$(docker-compose ls |\
+        sed -n -e '/\[alias_dsn\]/,/\[data_formats\]/ p' |\
+        sed -n -e '/^#/!p' |\
+        sed -n -e '/^\[/!p' |\
+        column -s'=' -t |\
+        grep "$1" |\
+        sort |\
+        fzf -1)
+    if [[ $db_name != '' ]]; then
+        db_name="$(echo $db_name | gsed "s#\s.*##")"
+        echo "Connecting to $db_name"
+        pgcli -D "$db_name"
+    fi
+}
+
+gbf() 
+{
+    git for-each-ref \
+        --sort=committerdate refs/heads/ \
+        --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) # %(color:red)%(objectname:short)%(color:reset) # %(contents:subject) # %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' \
+        --color=always \
+        | fzf --delimiter "#" \
+        -1 \
+        --ansi --no-sort --tac \
+        --preview 'git log --oneline --color=always {1}' \
+        --bind 'enter:become(git checkout {1})'
 }

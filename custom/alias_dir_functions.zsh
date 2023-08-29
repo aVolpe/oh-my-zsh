@@ -38,3 +38,16 @@ function cdf() {
         cd "$(echo $dest_dir | gsed 's/\w*\s\+//')"
     fi
 }
+
+function gbf() {
+    git for-each-ref \
+        --sort=committerdate refs/heads/ \
+        --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) # %(color:red)%(objectname:short)%(color:reset) # %(contents:subject) # %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' \
+        --color=always \
+        | fzf --delimiter "#" \
+        -1 \
+        --ansi --no-sort --tac \
+        --preview 'git log --oneline --color=always {1}' \
+        --bind 'enter:become(git checkout {1})'
+}
+
