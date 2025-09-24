@@ -3,9 +3,9 @@ on:
   workflow_dispatch: {}
   push:
     paths:
-      - tools/install.sh
-      - .github/workflows/installer
-      - .github/workflows/installer.yml
+      - 'tools/install.sh'
+      - '.github/workflows/installer/**'
+      - '.github/workflows/installer.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -17,6 +17,7 @@ permissions:
 jobs:
   test:
     name: Test installer
+    if: github.repository == 'ohmyzsh/ohmyzsh'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -24,8 +25,13 @@ jobs:
           - ubuntu-latest
           - macos-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+        with:
+          egress-policy: audit
+
       - name: Set up git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Install zsh
         if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
@@ -40,16 +46,21 @@ jobs:
     needs:
       - test
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Install Vercel CLI
         run: npm install -g vercel
       - name: Setup project and deploy
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           cp tools/install.sh .github/workflows/installer/install.sh
           cd .github/workflows/installer
-          vc link --yes -t ${{ secrets.VERCEL_TOKEN }}
-          vc deploy --prod -t ${{ secrets.VERCEL_TOKEN }}
+          vc deploy --prod -t "$VERCEL_TOKEN"
